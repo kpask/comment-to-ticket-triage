@@ -2,6 +2,7 @@ package com.example.pulsedesk.models;
 
 import com.example.pulsedesk.enums.Category;
 import com.example.pulsedesk.enums.Priority;
+import com.example.pulsedesk.enums.Status;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,9 @@ public class Ticket{
 
     @Enumerated(EnumType.STRING)
     private Priority priority;
+
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.OPEN;
 
     @OneToOne
     @JoinColumn(name = "comment_id")
@@ -84,5 +88,12 @@ public class Ticket{
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }
