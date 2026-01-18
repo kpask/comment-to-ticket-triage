@@ -1,6 +1,7 @@
 package com.example.pulsedesk.service;
 
 import com.example.pulsedesk.enums.Status;
+import com.example.pulsedesk.exceptions.TicketNotFoundException;
 import com.example.pulsedesk.models.Ticket;
 import com.example.pulsedesk.repository.TicketRepository;
 import org.springframework.stereotype.Service;
@@ -17,12 +18,10 @@ public class TicketService {
 
     public Ticket updateTicket(int ticketId, Status status){
         if(status == null){
-            throw new IllegalArgumentException("Status can't be null");
+            throw new IllegalArgumentException("Status can't be null.");
         }
 
-        Ticket ticket = repo.findById(ticketId)
-                .orElseThrow(() -> new IllegalArgumentException("Ticket not found"));
-
+        Ticket ticket = getTicketById(ticketId);
         ticket.setStatus(status);
         return repo.save(ticket);
     }
@@ -33,7 +32,7 @@ public class TicketService {
 
     public Ticket getTicketById(int ticketId){
         return repo.findById(ticketId)
-                .orElseThrow(() -> new IllegalArgumentException("Ticket not found"));
+                .orElseThrow(() -> new TicketNotFoundException("Ticket with id " + ticketId + " not found."));
     }
     public List<Ticket> getAllTickets(){
         return repo.findAll();
@@ -45,7 +44,7 @@ public class TicketService {
 
     public Ticket addTicket(Ticket ticket){
         if(ticket == null){
-            throw new IllegalArgumentException("Ticket can't be null");
+            throw new IllegalArgumentException("Ticket can't be null.");
         }
         return repo.save(ticket);
     }
