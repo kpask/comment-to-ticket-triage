@@ -1,5 +1,6 @@
 package com.example.pulsedesk.controllers;
 
+import com.example.pulsedesk.dtos.TicketResponse;
 import com.example.pulsedesk.models.Ticket;
 import com.example.pulsedesk.service.TicketService;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +21,35 @@ public class TicketController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Ticket>> getAllTickets(){
-        return ResponseEntity.ok(ticketService.getAllTickets());
+    public ResponseEntity<List<TicketResponse>> getAllTickets(){
+        List<TicketResponse> list = ticketService.getAllTickets().stream()
+                .map(t -> new TicketResponse(
+                        t.getId(),
+                        t.getTitle(),
+                        t.getSummary(),
+                        t.getCategory(),
+                        t.getPriority(),
+                        t.getStatus(),
+                        t.getComment() != null ? t.getComment().getText() : null
+                ))
+                .toList();
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ticket> getTicketById(@PathVariable int id){
-        return ResponseEntity.ok(ticketService.getTicketById(id));
+    public ResponseEntity<TicketResponse> getTicketById(@PathVariable int id){
+        Ticket t = ticketService.getTicketById(id);
+        TicketResponse response = new TicketResponse(
+                t.getId(),
+                t.getTitle(),
+                t.getSummary(),
+                t.getCategory(),
+                t.getPriority(),
+                t.getStatus(),
+                t.getComment().getText()
+        );
+
+        return ResponseEntity.ok(response);
     }
 
 }

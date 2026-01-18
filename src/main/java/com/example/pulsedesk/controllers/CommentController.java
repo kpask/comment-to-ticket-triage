@@ -1,5 +1,7 @@
 package com.example.pulsedesk.controllers;
 
+import com.example.pulsedesk.dtos.CommentRequest;
+import com.example.pulsedesk.dtos.CommentResponse;
 import com.example.pulsedesk.models.Comment;
 import com.example.pulsedesk.service.CommentService;
 import org.springframework.http.ResponseEntity;
@@ -18,18 +20,23 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Comment>> getAllComments() {
-        return ResponseEntity.ok(commentService.getAllComments());
+    public ResponseEntity<List<CommentResponse>> getAllComments() {
+        List<CommentResponse> list = commentService.getAllComments().stream()
+                .map(c -> new CommentResponse(c.getText(), c.getCreatedAt()))
+                .toList();
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Comment> getCommentById(@PathVariable int id) {
-        return ResponseEntity.ok(commentService.getCommentById(id));
+    public ResponseEntity<CommentResponse> getCommentById(@PathVariable int id) {
+        Comment comment = commentService.getCommentById(id);
+        return ResponseEntity.ok(new CommentResponse(comment.getText(), comment.getCreatedAt()));
     }
 
     @PostMapping
-    public ResponseEntity<Comment> addComment(@RequestBody String text) {
-        Comment saved = commentService.addComment(text);
-        return ResponseEntity.ok(saved);
+    public ResponseEntity<CommentResponse> addComment(@RequestBody CommentRequest body) {
+        Comment saved = commentService.addComment(body.text());
+        CommentResponse response = new CommentResponse(saved.getText(), saved.getCreatedAt());
+        return ResponseEntity.ok(response);
     }
 }
