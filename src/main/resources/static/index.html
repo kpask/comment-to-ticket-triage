@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulseDesk | AI Support Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="app-container">
+    <nav class="sidebar">
+        <div class="logo">PulseDesk</div>
+        <button class="nav-btn active" onclick="showSection('commentsSection', this)">
+            <span>💬</span> Comments
+        </button>
+        <button class="nav-btn" onclick="showSection('ticketsSection', this)">
+            <span>🎫</span> Tickets
+        </button>
+    </nav>
+
+    <main class="content">
+        <section id="commentsSection" class="section">
+            <header class="section-header">
+                <h2>Submit Feedback</h2>
+                <p>Feel free to leave any feedback that you have</p>
+            </header>
+
+            <div class="card">
+                <textarea id="commentText" placeholder="Describe the issue or feedback..."></textarea>
+                <div class="card-footer">
+                    <p id="commentMessage" class="message hidden"></p>
+                    <button class="btn-primary" onclick="submitComment()">Send</button>
+                </div>
+            </div>
+
+            <h3>Recent Activity</h3>
+            <div id="commentsList" class="grid-list"></div>
+        </section>
+
+        <section id="ticketsSection" class="section hidden">
+            <header class="section-header">
+                <h2>Support Tickets</h2>
+                <p>Track issues identified by AI analysis.</p>
+            </header>
+            <div id="ticketsList" class="ticket-grid"></div>
+        </section>
+    </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
