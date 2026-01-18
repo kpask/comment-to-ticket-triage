@@ -4,6 +4,7 @@ import com.example.pulsedesk.dtos.CommentRequest;
 import com.example.pulsedesk.dtos.CommentResponse;
 import com.example.pulsedesk.models.Comment;
 import com.example.pulsedesk.service.CommentService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<CommentResponse> addComment(@RequestBody CommentRequest body) {
+    public ResponseEntity<CommentResponse> addComment(@Valid @RequestBody CommentRequest body) {
         Comment saved = commentService.addComment(body.text());
         CommentResponse response = new CommentResponse(saved.getText(), saved.getCreatedAt());
         return ResponseEntity.ok(response);
