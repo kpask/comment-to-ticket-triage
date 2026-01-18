@@ -1,6 +1,8 @@
 package com.example.pulsedesk.service;
 
+import com.example.pulsedesk.dtos.AiTicketResponse;
 import com.example.pulsedesk.models.Comment;
+import com.example.pulsedesk.models.Ticket;
 import com.example.pulsedesk.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,16 +12,37 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository repo;
+    private final TicketService ticketService;
+    private final AiAnalysisService aiAnalysisService;
 
-    public CommentService(CommentRepository repo) {
+    public CommentService(CommentRepository repo,
+                          TicketService ticketService,
+                          AiAnalysisService aiAnalysisService) {
         this.repo = repo;
+        this.ticketService = ticketService;
+        this.aiAnalysisService = aiAnalysisService;
     }
 
     public Comment addComment(String text) {
         if (text == null || text.trim().length() < 5) {
             throw new IllegalArgumentException("Comment text is too short");
         }
-        return repo.save(new Comment(text.trim()));
+
+        Comment comment = repo.save(new Comment(text.trim()));
+        AiTicketResponse aiTicketResponse = aiAnalysisService.analyzeComment(comment.getText());
+
+        if(aiTicketResponse.createTicket()){
+            Ticket ticket = new Ticket();
+            ticket.setTitle(aiTicketResponse.title());
+            ticket.setSummary(aiTicketResponse.summary());
+            ticket.setCategory(aiTicketResponse.category());
+            ticket.setPriority(aiTicketResponse.priority());
+            ticket.setComment(comment);
+
+            ticketService.addTicket(ticket);
+        }
+
+        return comment;
     }
 
     public List<Comment> getAllComments(){
