@@ -1,11 +1,8 @@
 package com.example.pulsedesk.service;
 
-import com.example.pulsedesk.dtos.AiTicketResponse;
 import com.example.pulsedesk.exceptions.CommentNotFoundException;
 import com.example.pulsedesk.models.Comment;
-import com.example.pulsedesk.models.Ticket;
 import com.example.pulsedesk.repository.CommentRepository;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

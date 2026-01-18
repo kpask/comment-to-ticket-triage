@@ -43,6 +43,8 @@ comment-to-ticket-triage/
 │   │   ├── Priority.java
 │   │   └── Status.java
 │   ├── exceptions/
+│   │   ├── CommentNotFoundException.java
+│   │   ├── TicketNotFoundException.java
 │   │   └── GlobalExceptionHandler.java
 │   ├── models/
 │   │   ├── Comment.java
@@ -71,15 +73,18 @@ comment-to-ticket-triage/
 
 ### Prerequisites
 
-* Java 17 or higher
+* **Java 17**
 * Internet connection (for Hugging Face API)
 
+---
 ## Installation & Setup
 
-### Step 1: Prerequisites
+### Step 1: Clone the Repository
 
-* **Java 21** (Download: [Eclipse Temurin](https://adoptium.net/temurin/releases/?version=21))
-* **Gradle** (Included via wrapper)
+```bash
+git clone https://github.com/kpask/comment-to-ticket-triage.git
+cd comment-to-ticket-triage
+```
 
 ### Step 2: Get your Hugging Face API Token
 
@@ -87,49 +92,40 @@ comment-to-ticket-triage/
 2. Click your profile icon (top-right) → **Settings**.
 3. Select **Access Tokens** from the left sidebar.
 4. Click **Create new token**.
-5. Set the type to **Read** and name it `PulseDesk`.
+5. Set type to **Read** and name it `PulseDesk`.
 6. **Copy the token** (e.g., `hf_xxxxxxxxxxxxxxxxxxxxxxxxxxx`).
 
 ### Step 3: Configure and Run
 
-1. **Clone the Repo**:
-```bash
-git clone https://github.com/your-username/pulsedesk.git
-cd pulsedesk
-
-
-```bash
-git clone https://github.com/your-username/comment-to-ticket-triage.git
-cd comment-to-ticket-triage
-```
-
-2. **Configure Hugging Face API key**
+1. Add your Hugging Face API key:
 
 ```properties
 # src/main/resources/application.properties
 huggingface.api.key=YOUR_HUGGING_FACE_API_KEY
 ```
 
-3. **Start the application**
+2. Start the application:
 
 ```bash
 ./gradlew bootRun
 ```
 
-4. **Access the web interface**
+3. Access the web interface:
 
 * PulseDesk UI: [http://localhost:8080](http://localhost:8080)
 * H2 Console: [http://localhost:8080/h2-console](http://localhost:8080/h2-console)
 
-    * JDBC URL: `jdbc:h2:mem:ticketdb`
-    * Username: `sa`
-    * Password: *(empty)*
+  * JDBC URL: `jdbc:h2:mem:ticketdb`
+  * Username: `sa`
+  * Password: *(empty)*
 
 ---
 ### Main Page: Submit Comments
 ![Main Page](src/main/resources/static/images/main-page.png)
 ### Ticket Page: AI-Generated Tickets
 ![Ticket Page](src/main/resources/static/images/tickets-page.png)
+
+---
 
 ## API Endpoints
 
@@ -140,7 +136,6 @@ huggingface.api.key=YOUR_HUGGING_FACE_API_KEY
 | GET    | `/comments`      | List all comments    |
 | GET    | `/comments/{id}` | Get a comment by ID  |
 | POST   | `/comments`      | Submit a new comment |
-
 
 ### Tickets
 
@@ -158,12 +153,11 @@ huggingface.api.key=YOUR_HUGGING_FACE_API_KEY
 3. **Ticket Decision**: The AI determines if the comment requires a ticket.
 4. **Ticket Creation**: If needed, the AI generates:
 
-    * Title
-    * Summary
-    * Category (Bug, Feature, Billing, Account, Other)
-    * Priority (High, Medium, Low)
-5. **Storage & Visibility**: Tickets are saved in H2 and viewable in the frontend.
-
+   * Title
+   * Summary
+   * Category (Bug, Feature, Billing, Account, Other)
+   * Priority (High, Medium, Low)
+5. **Storage & Visibility**: Tickets are saved in H2 and can be viewed in the frontend.
 
 ---
 
@@ -176,9 +170,8 @@ huggingface.api.key=YOUR_HUGGING_FACE_API_KEY
 # Build Docker image
 docker build -t pulsedesk .
 
-# Run container
-docker run -p 8080:8080 pulsedesk
+# Run container (make sure to pass Hugging Face API key)
+docker run -p 8080:8080 -e HUGGINGFACE_API_KEY=your_key pulsedesk
 ```
 
 ---
-

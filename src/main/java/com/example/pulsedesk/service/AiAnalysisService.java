@@ -62,7 +62,7 @@ public class AiAnalysisService {
         }
     }
 
-    private AiTicketResponse parseAiResponse(String aiResponse) throws Exception {
+    private AiTicketResponse parseAiResponse(String aiResponse) {
         JsonNode content = objectMapper.readTree(aiResponse)
                 .path("choices").path(0).path("message").path("content");
 

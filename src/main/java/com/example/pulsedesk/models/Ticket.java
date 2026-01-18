@@ -4,7 +4,6 @@ import com.example.pulsedesk.enums.Category;
 import com.example.pulsedesk.enums.Priority;
 import com.example.pulsedesk.enums.Status;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 
