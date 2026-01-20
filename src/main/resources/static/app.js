@@ -24,6 +24,9 @@ async function submitComment() {
     if (!textarea || !submitBtn) return;
 
     const text = textarea.value.trim();
+    if (text.length > 255) {
+        return showMessage('commentMessage', 'Comment must not exceed 255 characters.', 'error');
+    }
     if (!text || text.length < 5) {
         return showMessage('commentMessage', 'Comment must be at least 5 characters.', 'error');
     }

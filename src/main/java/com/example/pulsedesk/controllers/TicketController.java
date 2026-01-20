@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * REST controller for managing support tickets.
+ * Provides endpoints to retrieve ticket information.
+ */
 @RestController
 @RequestMapping("/tickets")
 public class TicketController {
@@ -20,6 +24,11 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
+    /**
+     * Retrieves all tickets.
+     *
+     * @return a list of all tickets with their details.
+     */
     @GetMapping
     public ResponseEntity<List<TicketResponse>> getAllTickets(){
         List<TicketResponse> list = ticketService.getAllTickets().stream()
@@ -36,6 +45,12 @@ public class TicketController {
         return ResponseEntity.ok(list);
     }
 
+    /**
+     * Retrieves a specific ticket by its ID.
+     *
+     * @param id the ID of the ticket to retrieve.
+     * @return the ticket with its details.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<TicketResponse> getTicketById(@PathVariable int id){
         Ticket t = ticketService.getTicketById(id);

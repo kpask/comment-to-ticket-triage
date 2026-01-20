@@ -12,6 +12,10 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.*;
 
+/**
+ * Service for analyzing user comments using the Hugging Face Inference API.
+ * Determines if a comment should be converted into a support ticket and generates ticket details.
+ */
 @Service
 public class AiAnalysisService {
 
@@ -27,6 +31,12 @@ public class AiAnalysisService {
     private static final AiTicketResponse NO_TICKET =
             new AiTicketResponse(false, null, null, null, null);
 
+    /**
+     * Analyzes a user comment using the Hugging Face Inference API.
+     *
+     * @param commentText the text of the user comment to analyze.
+     * @return an AiTicketResponse containing the analysis result and ticket details if applicable.
+     */
     public AiTicketResponse analyzeComment(String commentText) {
         if (commentText == null || commentText.isBlank()) {
             return NO_TICKET;
@@ -62,6 +72,12 @@ public class AiAnalysisService {
         }
     }
 
+    /**
+     * Parses the AI response to extract ticket details.
+     *
+     * @param aiResponse the raw response from the AI API.
+     * @return an AiTicketResponse containing the parsed ticket details.
+     */
     private AiTicketResponse parseAiResponse(String aiResponse) {
         JsonNode content = objectMapper.readTree(aiResponse)
                 .path("choices").path(0).path("message").path("content");
@@ -83,6 +99,12 @@ public class AiAnalysisService {
         );
     }
 
+    /**
+     * Builds the prompt to send to the AI model for comment analysis.
+     *
+     * @param commentText the text of the user comment.
+     * @return the formatted prompt string.
+     */
     private String buildPrompt(String commentText) {
         return "You are a support ticket classifier.\n" +
                 "Do not include markdown, code blocks, or explanations.\n" +
@@ -95,6 +117,12 @@ public class AiAnalysisService {
                 "Comment: \"" + commentText + "\"";
     }
 
+    /**
+     * Extracts the JSON content from the AI response text.
+     *
+     * @param text the AI response text.
+     * @return the extracted JSON string or null if extraction fails.
+     */
     private String extractJson(String text) {
         int start = text.indexOf("{");
         int end = text.lastIndexOf("}");

@@ -6,6 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 
+/**
+ * Represents a user comment submitted to the system.
+ * Each comment contains text, a creation timestamp, and a unique identifier.
+ */
 @Entity
 public class Comment{
     @Id
@@ -17,7 +21,7 @@ public class Comment{
 
     public Comment(){}
 
-    public Comment(String text){
+    public Comment(String text) {
         this.text = text;
     }
 
@@ -37,7 +41,7 @@ public class Comment{
         this.createdAt = createdAt;
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 }

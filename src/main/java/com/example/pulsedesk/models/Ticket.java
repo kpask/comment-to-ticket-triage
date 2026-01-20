@@ -7,6 +7,10 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 
+/**
+ * Represents a support ticket generated from user comments.
+ * Each ticket contains details such as title, summary, category, priority, status, and associated comment.
+ */
 @Entity
 public class Ticket{
     @Id

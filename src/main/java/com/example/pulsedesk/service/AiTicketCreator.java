@@ -6,6 +6,10 @@ import com.example.pulsedesk.models.Ticket;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for creating support tickets based on AI analysis of user comments.
+ * Handles the integration between the AI analysis and ticket creation logic.
+ */
 @Service
 public class AiTicketCreator {
 
@@ -17,6 +21,12 @@ public class AiTicketCreator {
         this.aiAnalysisService = aiAnalysisService;
     }
 
+    /**
+     * Asynchronously creates a support ticket if the AI analysis determines
+     * that the provided comment should be converted into a ticket.
+     *
+     * @param comment the user comment to analyze and potentially convert into a ticket.
+     */
     @Async
     public void createTicket(Comment comment){
         try{
