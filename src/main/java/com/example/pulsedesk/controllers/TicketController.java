@@ -61,7 +61,7 @@ public class TicketController {
                 t.getCategory(),
                 t.getPriority(),
                 t.getStatus(),
-                t.getComment().getText()
+                t.getComment() != null ? t.getComment().getText() : null
         );
 
         return ResponseEntity.ok(response);

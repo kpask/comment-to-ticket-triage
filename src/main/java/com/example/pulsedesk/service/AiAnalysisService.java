@@ -90,12 +90,27 @@ public class AiAnalysisService {
         JsonNode data = objectMapper.readTree(json);
         if (!data.path("createTicket").asBoolean(false)) return NO_TICKET;
 
+        Category category;
+        Priority priority;
+
+        try {
+            category = Category.valueOf(data.path("category").asText().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            category = Category.OTHER; // Default to OTHER if invalid
+        }
+
+        try {
+            priority = Priority.valueOf(data.path("priority").asText().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            priority = Priority.MEDIUM; // Default to MEDIUM if invalid
+        }
+
         return new AiTicketResponse(
                 true,
                 data.path("title").asText(),
                 data.path("summary").asText(),
-                Category.valueOf(data.path("category").asText().toUpperCase()),
-                Priority.valueOf(data.path("priority").asText().toUpperCase())
+                category,
+                priority
         );
     }
 
@@ -124,11 +139,17 @@ public class AiAnalysisService {
      * @return the extracted JSON string or null if extraction fails.
      */
     private String extractJson(String text) {
-        int start = text.indexOf("{");
-        int end = text.lastIndexOf("}");
-        if (start >= 0 && end > start) {
-            return text.substring(start, end + 1);
+        if (text == null) return null;
+
+        text = text.trim();
+        if (!text.startsWith("{")) return null;
+
+        try {
+            objectMapper.readTree(text);
+            return text;
+        } catch (Exception e) {
+            return null;
         }
-        return null;
     }
+
 }

@@ -27,15 +27,8 @@ public class CommentService {
      *
      * @param text the text of the comment to add.
      * @return the saved comment.
-     * @throws IllegalArgumentException if the comment text is null or too short.
      */
     public Comment addComment(String text) {
-        if (text == null || text.trim().length() < 5) {
-            throw new IllegalArgumentException("Comment text is too short.");
-        }
-        if (text.length() > 255) {
-            throw new IllegalArgumentException("Comment text exceeds the maximum allowed length of 255 characters.");
-        }
         Comment comment = repo.save(new Comment(text.trim()));
         aiTicketCreator.createTicket(comment);
         return comment;
@@ -74,14 +67,6 @@ public class CommentService {
 
     public Comment editComment(int commentId, String newText) {
         Comment comment = getCommentById(commentId);
-
-        if (newText == null || newText.trim().length() < 5) {
-            throw new IllegalArgumentException("Updated comment text is too short.");
-        }
-        if (newText.length() > 255) {
-            throw new IllegalArgumentException("Updated comment text exceeds the maximum allowed length of 255 characters.");
-        }
-
         comment.setText(newText.trim());
         return repo.save(comment);
     }
