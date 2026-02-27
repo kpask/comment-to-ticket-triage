@@ -96,21 +96,25 @@ cd comment-to-ticket-triage
 6. **Copy the token** (e.g., `hf_xxxxxxxxxxxxxxxxxxxxxxxxxxx`).
 
 ### Step 3: Configure and Run
+1. Create your local properties file from the provided template:
+```bash
+cp src/main/resources/application.properties.template src/main/resources/application.properties
+```
 
-1. Add your Hugging Face API key:
+2. Add your Hugging Face API key:
 
 ```properties
 # src/main/resources/application.properties
 huggingface.api.key=YOUR_HUGGING_FACE_API_KEY
 ```
 
-2. Start the application:
+3. Start the application:
 
 ```bash
 ./gradlew bootRun
 ```
 
-3. Access the web interface:
+4. Access the web interface:
 
 * PulseDesk UI: [http://localhost:8080](http://localhost:8080)
 * H2 Console: [http://localhost:8080/h2-console](http://localhost:8080/h2-console)
